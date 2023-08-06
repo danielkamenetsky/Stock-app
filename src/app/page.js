@@ -1,11 +1,25 @@
 "use client"; // This is a client component
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './globals.css';
+import {csv} from 'd3';
 
 const Home = () => {
   const [ticker, setTicker] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [tickerData, setTickerData] = useState([]);
+  
+  useEffect(() => {
+    csv("/stock_data.csv").then(data => {
+      setTickerData(data);
+    });
+  }, []);
+  
+  useEffect(() => {
+    console.log(tickerData);
+  }, [tickerData]);
+
+
   // This function handles the form submission. It prevents default form submission from occurring and then logs current state
   const handleSubmit = (e) => {
     e.preventDefault();
