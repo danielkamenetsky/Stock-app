@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import './globals.css';
 import {csv} from 'd3';
+import Plot from 'react-plotly.js';
 
 const Home = () => {
   const [ticker, setTicker] = useState("");
@@ -35,6 +36,16 @@ const Home = () => {
 
       console.log(filteredData);
     };
+  const plotData = {
+    x: tickerData.map(item => item.date),
+    y: tickerData.map(item => item.close),
+    type: 'scatter',
+    mode: 'lines+points',
+    marker: {color: 'red'},
+  };
+
+
+
 
   return (
     <div className="p-10">
@@ -84,6 +95,11 @@ const Home = () => {
           Fetch Data
         </button>
       </form>
+      <Plot
+        data={[plotData]}
+        layout={ {width: 720, height: 480, title: 'Stock Value Over Time'} }
+      />
+
     </div>
   );
 };
