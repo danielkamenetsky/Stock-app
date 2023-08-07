@@ -10,14 +10,23 @@ const Home = () => {
   const [endDate, setEndDate] = useState("");
   const [tickerData, setTickerData] = useState([]);
   const [plotData, setPlotData] = useState({});
+  const [mounted, setMounted] = useState(false); // add this line
+
+  useEffect(() => {
+    setMounted(true); // set mounted to true when component has mounted
+  }, []);
+
 
     
   useEffect(() => {
-    csv("/stock_data.csv").then(data => {
-      setTickerData(data);
-    });
-  }, []);
-   
+    if (mounted) { // only load CSV when mounted
+      csv("/stock_data.csv").then(data => {
+        setTickerData(data);
+      });
+    }
+  }, [mounted]); // add mounted to dependency list
+
+
   useEffect(() => {
     const filteredData = tickerData.filter((data) => {
       return (
