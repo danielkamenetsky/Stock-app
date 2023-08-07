@@ -2,7 +2,12 @@
 import React, {useState, useEffect} from 'react';
 import './globals.css';
 import {csv} from 'd3';
-import Plot from 'react-plotly.js';
+import dynamic from 'next/dynamic';
+
+// Use dynamic import for Plot
+const Plot = dynamic(() => import('react-plotly.js'), {
+  ssr: false, // This line will make the component only rendered on the browser
+});
 
 const Home = () => {
   const [ticker, setTicker] = useState("");
