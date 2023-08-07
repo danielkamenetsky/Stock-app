@@ -2,35 +2,31 @@
 <html>
   <head>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
   </head>
   <body>
     <div id="myDiv"></div>
     <script>
-      const response = [
-        {"ticker": "AAPL", "date": "2021-01-01", "close": 139.36},
-        {"ticker": "AAPL", "date": "2021-01-02", "close": 141.03},
-        {"ticker": "AAPL", "date": "2021-01-03", "close": 141.67},
-        {"ticker": "AAPL", "date": "2021-01-04", "close": 141.2},
-        {"ticker": "MSFT", "date": "2021-01-01", "close": 221.34},
-        {"ticker": "MSFT", "date": "2021-01-02", "close": 221.63},
-        {"ticker": "GOOG", "date": "2021-01-01", "close": 1739.52},
-        {"ticker": "GOOG", "date": "2021-01-02", "close": 1744.91}
-      ]
+      fetch('/stock_data.csv')
+        .then(response => response.text())
+        .then(data => {
+          const parsedCsv = d3.csvParse(data);
 
-      const aaplData = response.filter(item => item.ticker === 'AAPL');
+          const aaplData = parsedCsv.filter(item => item.ticker === 'AAPL');
 
-      const dates = aaplData.map(item => item.date);
-      const closingPrices = aaplData.map(item => item.close);
+          const dates = aaplData.map(item => item.date);
+          const closingPrices = aaplData.map(item => Number(item.close));
 
-      const data = {
-        x: dates,
-        y: closingPrices,
-        type: 'scatter',
-        mode: 'lines+markers',
-        marker: {color: 'blue'},
-      };
+          const plotData = {
+            x: dates,
+            y: closingPrices,
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: {color: 'blue'},
+          };
 
-      Plotly.newPlot('myDiv', [data]);
+          Plotly.newPlot('myDiv', [plotData]);
+        });
     </script>
   </body>
 </html>

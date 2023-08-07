@@ -9,12 +9,42 @@ const Home = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [tickerData, setTickerData] = useState([]);
-  
+  const [plotData, setPlotData] = useState({});
+
+    
   useEffect(() => {
     csv("/stock_data.csv").then(data => {
       setTickerData(data);
     });
   }, []);
+   
+  useEffect(() => {
+    const filteredData = tickerData.filter((data) => {
+      return (
+        data.ticker === ticker &&
+        new Date(data.date) >= new Date(startDate) &&
+        new Date(data.date) <= new Date(endDate)
+      );
+    });
+
+    console.log("Filtered data:", filteredData); // Add this line to check the filtered data
+
+    const dates = filteredData.map(item => item.date);
+    const closingPrices = filteredData.map(item => Number(item.close));
+
+    console.log("Dates:", dates); // Add this line to check the dates
+    console.log("Closing prices:", closingPrices); // Add this line to check the closing prices
+
+    setPlotData({
+      x: dates,
+      y: closingPrices,
+      type: 'scatter',
+      mode: 'lines+markers',
+      marker: { color: 'blue' },
+    });
+  }, [tickerData, ticker, startDate, endDate]);
+
+
 
   useEffect(() => {
     console.log(tickerData);
@@ -36,13 +66,6 @@ const Home = () => {
 
       console.log(filteredData);
     };
-  const plotData = {
-    x: tickerData.map(item => item.date),
-    y: tickerData.map(item => item.close),
-    type: 'scatter',
-    mode: 'lines+points',
-    marker: {color: 'red'},
-  };
 
 
 
@@ -99,6 +122,8 @@ const Home = () => {
         data={[plotData]}
         layout={ {width: 720, height: 480, title: 'Stock Value Over Time'} }
       />
+
+
 
     </div>
   );
