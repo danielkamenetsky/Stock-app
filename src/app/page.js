@@ -14,7 +14,7 @@ const Home = () => {
       setTickerData(data);
     });
   }, []);
-  
+
   useEffect(() => {
     console.log(tickerData);
   }, [tickerData]);
@@ -22,9 +22,19 @@ const Home = () => {
 
   // This function handles the form submission. It prevents default form submission from occurring and then logs current state
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({ ticker, startDate, endDate });
-  };
+      e.preventDefault();
+      console.log({ ticker, startDate, endDate });
+
+      const filteredData = tickerData.filter((data) => {
+        return (
+          data.ticker === ticker &&
+          new Date(data.date) >= new Date(startDate) &&
+          new Date(data.date) <= new Date(endDate)
+        );
+      });
+
+      console.log(filteredData);
+    };
 
   return (
     <div className="p-10">

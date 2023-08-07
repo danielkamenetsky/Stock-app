@@ -25,3 +25,22 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+body input[type="text"], body input[type="date"] {
+    color: #000000;
+    background-color: #fff;
+}
+
+
+body input[type="text"]:focus,
+body input[type="date"]:focus {
+  color: rgb(var(--foreground-rgb));
+  background-color: #fff; /* This sets the background to white when input is focused */
+}
+body {
+  background-color: red;
+}
+
+body input[type="text"]:focus, body input[type="date"]:focus {
+    color: #000000;
+}
